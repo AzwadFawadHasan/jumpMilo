@@ -7,7 +7,7 @@ A side scrolling game made using spritesheet images, js, html and css. It suppor
 
 ### How to play
 
-Go to this link: 
+Go to this link: https://azwadfawadhasan.github.io/jumpMilo/
 
 To restart the game in web, just press Enter. In mobile devices, swipe down to restart.
 
