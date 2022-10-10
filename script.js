@@ -22,59 +22,70 @@ class InputHandler{//puts event listeners  to keyboard events and holds arrays o
         this.touchY=''; //initial startign coorodinates
         this.touchTreshold=30;//to make sure only longer swipes are detected
 
-        window.addEventListener('keydown', e =>{
+        window.addEventListener('keydown', e => {
             //console.log(e.key);
-            if(
-                (e.key === 'ArrowDown' || e.key ==='ArrowUp' || e.key=== 'ArrowLeft' || e.key === 'ArrowRight')
-             && this.keys.indexOf(e.key)=== -1){// this means this.key which is arrow donwn is not present in the array
+            if((
+                e.key === 'ArrowDown' || 
+                e.key ==='ArrowUp' || 
+                e.key=== 'ArrowLeft' || 
+                e.key === 'ArrowRight')
+             && this.keys.indexOf(e.key) === -1){// this means this.key which is arrow donwn is not present in the array
                 this.keys.push(e.key);
-            }else if (e.key ==='Enter' && gameOver){
+                console.log('key push activated')
+            }else if (e.key ==='Enter' && gameOver)
                 restartGame();
-            }
-            console.log(e.key, this.keys);  
+            
+        });
+            
+            //console.log(e.key, this.keys);  
             //ES6 arrow functions don't bind their own 'this' but
             // they inherit the one from their parent scope this
             // this is called lexical scoping
-        });
-
-        window.addEventListener('keyup', e =>{
-            //console.log(e.key);
-            if(
-                ((e.key === 'ArrowDown') || (e.key ==='ArrowUp' )|| (e.key=== 'ArrowLeft') || (e.key === 'ArrowRight'))
-                 ){// this means this.key which is arrow donwn is not present in the array
-                        this.keys.splice(this.keys.indexOf(e.key),1);//if key that was RELEASED was arrow down we want to remove it from htre array
-            
-            //splice takes 2 arguments index of key that needs to be removed
-            // and how many elements starting from that index we want to remove
-            //1 means to remove 1 element from tthat array
-            }
-           // console.log(e.key, this.keys);  
-          
-        });
-
+        window.addEventListener('keyup', e => {
+                //console.log(e.key);
+                if(e.key === 'ArrowDown' ||
+                        e.key ==='ArrowUp'    || 
+                        e.key=== 'ArrowLeft'  || 
+                        e.key === 'ArrowRight'
+                     ){// this means this.key which is arrow donwn is not present in the array
+                            console.log('splice activated')
+                            this.keys.splice(this.keys.indexOf(e.key),1);//if key that was RELEASED was arrow down we want to remove it from htre array
+                
+                //splice takes 2 arguments index of key that needs to be removed
+                // and how many elements starting from that index we want to remove
+                //1 means to remove 1 element from tthat array
+                }
+               // console.log(e.key, this.keys);  
+              
+            });
+    
         window.addEventListener('touchstart', e=> {
-            //console.log(e.changedTouches[0].pageY);
-            this.touchY = e.changedTouches[0].pageY;
-        });
-
+                //console.log(e.changedTouches[0].pageY);
+                this.touchY = e.changedTouches[0].pageY;
+            });
+    
         window.addEventListener('touchmove', e=> {
-            const swipeDistance =  e.changedTouches[0].pageY- this.touchY;
-            if(swipeDistance < -this.touchTreshold && this.keys.indexOf('swipe up') === -1){//checks whether user swiped up// at the same time we want to check if swipe up is NOT in the keys array
-                this.keys.push('swipe up');
-            }
-            else if(swipeDistance> this.touchTreshold &&  this.keys.indexOf('swipe up') === -1 ){
-                this.keys.push('swipe down');
-                if(gameOver){restartGame();}
-            }
-        });
-
+                const swipeDistance =  e.changedTouches[0].pageY- this.touchY;
+                if(swipeDistance < -this.touchTreshold && this.keys.indexOf('swipe up') === -1){//checks whether user swiped up// at the same time we want to check if swipe up is NOT in the keys array
+                    this.keys.push('swipe up');
+                }
+                else if(swipeDistance> this.touchTreshold &&  this.keys.indexOf('swipe down') === -1 ){
+                    this.keys.push('swipe down');
+                    if(gameOver){restartGame();}
+                }
+            });
+    
         window.addEventListener('touchend', e=> {
-            //console.log(e.changedTouches[0].pageY);
-            
-            this.keys.splice(this.keys.indexOf('swipe up'), 1);
-            this.keys.splice(this.keys.indexOf('swipe down'), 1);
-            
-        });
+                //console.log(e.changedTouches[0].pageY);
+                
+                this.keys.splice(this.keys.indexOf('swipe up'), 1);
+                this.keys.splice(this.keys.indexOf('swipe down'), 1);
+                
+            });
+
+        
+    
+        
     }
 }
 
@@ -156,16 +167,18 @@ class Player{
         }else if(input.keys.indexOf('ArrowLeft') > -1){
             this.speed=-5;
         }
-        else if((input.keys.indexOf('ArrowUp') > -1) || ((input.keys.indexOf('swipe up') ) > -1) && (this.onGround()) ){
-            this.vy+=-3;
+        else if((input.keys.indexOf('ArrowUp') > -1 || input.keys.indexOf('swipe up')  > -1) && this.onGround() ){
+           this.vy-=32;
+            
         }   
         else{
+            //this.vy=0;
             this.speed=0;
            
         }
 
 
-
+        //horizontal movement
 
         this.x+=this.speed;
 
@@ -178,8 +191,9 @@ class Player{
         //vertical movement
         this.y+= this.vy;
         if(!this.onGround()){//if player is in the air
-            this.maxFrame=5
             this.vy+=this.weight;
+            this.maxFrame=5
+            //this.vy+=this.weight;
             this.frameY=1;//changes animation of dog
 
 
@@ -188,12 +202,12 @@ class Player{
             this.maxFrame=8;
             this.frameY=0;
         }
-        if(this.y > this.gameHeight-this.height){
-            this.y=this.gameHeight-this.height;
+        if(this.y > (this.gameHeight-this.height)){
+            this.y=(this.gameHeight-this.height);
         }
     }
     onGround(){
-        return this.y >= (this.gameHeight-this.height);// if this is true
+        return this.y >= this.gameHeight-this.height;// if this is true
         //we know player is on ground
     }
 }
