@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function(){//benefit of using an a
 
 const canvas = document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');// this is the instance of built in canvas 2D api that holds all drawing methods and properties we need to animate our game
-canvas.width = 1400;
+canvas.width = 1280;
 canvas.height = 720;
 let enemies = [];
 let gameOver= false;
@@ -313,11 +313,11 @@ function displayStatusText(context){//gonna display the score
     //display score and lives
     context.fillStyle='black';
     context.font= '40px Helvetica';
-    context.fillText('Score: '+ score, 20,50)//fillText(text, x, y)
+    context.fillText('Score: '+ score, 25,50)//fillText(text, x, y)
     //second one used for shadow effect
     context.fillStyle='white';
     context.font= '40px Helvetica';
-    context.fillText('Score: '+ score, 22,52)//fillText(text, x, y)
+    context.fillText('Score: '+ score, 27,52)//fillText(text, x, y)
     if(gameOver){
         context.textAlign = 'center';
         context.fillStyle = 'red';
